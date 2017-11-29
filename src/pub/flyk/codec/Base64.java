@@ -61,7 +61,6 @@ public class Base64 {
 		 *
 		 * @return a String useful for debugging.
 		 */
-		@SuppressWarnings("boxing") // OK to ignore boxing here
 		@Override
 		public String toString() {
 			return String.format("%s[buffer=%s, currentLinePos=%s, eof=%s, ibitWorkArea=%s, lbitWorkArea=%s, " +
