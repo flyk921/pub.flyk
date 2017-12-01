@@ -1,9 +1,9 @@
-package pub.flyk.codec;
+package pub.flyk.utils;
 
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 
-public class DigestUtils {
+public class DigestUtil {
 	
 	/**
 	 * Used to build output as Hex

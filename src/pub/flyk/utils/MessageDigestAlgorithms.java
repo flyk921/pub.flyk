@@ -1,4 +1,4 @@
-package pub.flyk.codec;
+package pub.flyk.utils;
 
 public final class MessageDigestAlgorithms {
 	private MessageDigestAlgorithms() {
