@@ -9,3 +9,8 @@ test :
 	测试文件
 logs :
 	日志文件
+config :
+	配置文件
+image :
+	图片文件
+

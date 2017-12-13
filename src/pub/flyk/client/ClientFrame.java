@@ -77,7 +77,8 @@ public class ClientFrame extends JFrame{
 	
 	private Font infoFieldFont = new Font("SimSun", Font.PLAIN, 15);
 	private Color infoFieldFontColor = new Color(255, 255, 255);
-	private Color infoFieldBgColor = new Color(55, 127, 177);
+//	private Color infoFieldBgColor = new Color(55, 127, 177);
+	private Color infoFieldBgColor = new Color(168, 168, 168);
 	
 	private Font btnFont = new Font("SimSun", Font.PLAIN, 14);
 	private Color btnFontColor = new Color(77, 122, 141);
@@ -85,7 +86,8 @@ public class ClientFrame extends JFrame{
 	
 //	private Color bgColor = new Color(180, 205, 230);
 //	private Color bgColor = new Color(238, 238, 238);
-	private Color bgColor = new Color(81, 162, 207);
+//	private Color bgColor = new Color(81, 162, 207);
+	private Color bgColor = new Color(255, 153, 0);
 	
 	
 	public ClientFrame() {
@@ -227,23 +229,23 @@ public class ClientFrame extends JFrame{
 			buttonPanel.setLayout(flowLayout);
 			buttonPanel.setBackground(bgColor);
 			
-			JButton exitButton = initBtn("exit");
+			JButton exitButton = initBtn("Exit");
 			exitButton.addActionListener(l -> {
 				setVisible(false);
 				if (systemTray != null && trayIcon != null) {
 					systemTray.remove(trayIcon);
 				}
-				System.exit(0);
+				exit();
 			});
 			
-			JButton startButton = initBtn("start");
+			JButton startButton = initBtn("Start");
 			startButton.addActionListener(l -> {
 				saveOrUpdateConfig();
 				start();
 				setVisible(false);
 			});
 			
-			JButton cancelButton = initBtn("cancel");
+			JButton cancelButton = initBtn("Cancel");
 			cancelButton.addActionListener(l -> {
 				setVisible(false);
 			});
@@ -259,6 +261,7 @@ public class ClientFrame extends JFrame{
 		}
 		
 	}
+
 	private JButton initBtn(String title) {
 		JButton btn = new JButton(title);
 		btn.setPreferredSize(btnDimension);
@@ -283,6 +286,10 @@ public class ClientFrame extends JFrame{
 		ConfigUtil.saveClientConfig(clientConfig);
 	}
 
+	public void exit() {
+		
+		System.exit(0);
+	}
 	
 
 	public void start() {
