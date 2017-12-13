@@ -1,0 +1,32 @@
+Dec 04, 2017 11:14:47 AM pub.flyk.client.Test main
+SEVERE: haha
+Dec 04, 2017 11:14:47 AM pub.flyk.client.Test main
+INFO: haha
+Dec 04, 2017 11:14:47 AM pub.flyk.client.Test main
+WARNING: haha
+Dec 04, 2017 11:14:47 AM pub.flyk.client.Test main
+INFO: com.xyz.foo.level
+Dec 04, 2017 11:15:13 AM pub.flyk.client.Test main
+SEVERE: haha
+Dec 04, 2017 11:15:13 AM pub.flyk.client.Test main
+INFO: haha
+Dec 04, 2017 11:15:13 AM pub.flyk.client.Test main
+WARNING: haha
+Dec 04, 2017 11:15:13 AM pub.flyk.client.Test main
+INFO: com.xyz.foo.level
+Dec 04, 2017 11:24:05 AM pub.flyk.client.Test main
+SEVERE: haha
+Dec 04, 2017 11:24:05 AM pub.flyk.client.Test main
+INFO: haha
+Dec 04, 2017 11:24:05 AM pub.flyk.client.Test main
+WARNING: haha
+Dec 04, 2017 11:24:05 AM pub.flyk.client.Test main
+INFO: com.xyz.foo.level
+Dec 04, 2017 11:24:46 AM pub.flyk.client.Test main
+SEVERE: haha
+Dec 04, 2017 11:24:46 AM pub.flyk.client.Test main
+INFO: haha
+Dec 04, 2017 11:24:46 AM pub.flyk.client.Test main
+WARNING: haha
+Dec 04, 2017 11:24:46 AM pub.flyk.client.Test main
+INFO: com.xyz.foo.level
