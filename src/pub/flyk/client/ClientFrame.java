@@ -27,11 +27,18 @@ import pub.flyk.utils.CommonUtil;
 import pub.flyk.utils.ConfigUtil;
 import pub.flyk.utils.LoggerFactory;
 
+/**
+ * ClientFrame 
+ * @author flyk
+ * @date Dec 15, 2017
+ */
 public class ClientFrame extends JFrame{
 	
 	private static final long serialVersionUID = 9092857137087708777L;
 
 	private static Logger logger = LoggerFactory.getLogger(ClientFrame.class);
+	
+	private ClientService clientService = null;
 	
 	private FlowLayout flowLayout = new FlowLayout(FlowLayout.CENTER, 30, 15);
 	
@@ -287,32 +294,35 @@ public class ClientFrame extends JFrame{
 	}
 
 	public void exit() {
-		
 		System.exit(0);
+		if (clientService != null) {
+			clientService.close();
+		}
+	}
+	
+	public void showFrame(){
+		setState(NORMAL);
+		setVisible(true);
 	}
 	
 
 	public void start() {
-
-//		if (client != null && !client.isKill()) {
-//
-//			if (serverHost.equals(client.getServerHost()) && serverPort.equals(String.valueOf(client.getServerPort())) && password.equals(client.getPassword()) && proxyPort.equals(String.valueOf(client.getListenPort()))) {
-//
-//				return;
-//
-//			} else {
-//
-//				client.kill();
-//
-//			}
-//
-//		}
-//
-//		client = new Client(serverHost, serverPort, password, proxyPort);
-//
-//		client.start();
-
-
+		try {
+			if (clientService != null) {
+				if (clientService.isChanged(serverHost,Integer.parseInt(serverPort),password,Integer.parseInt(proxyPort))) {
+					clientService.close();
+					clientService = null;
+				}else{
+					return;
+				}
+			}
+			clientService = new ClientService(serverHost,Integer.parseInt(serverPort),password,Integer.parseInt(proxyPort));
+			clientService.service();
+		} catch (Exception e) {
+			logger.warning("ClientService service failed : " + e.getMessage());
+			clientService = null;
+			showFrame();
+		}
 	}
 	
 

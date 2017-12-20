@@ -79,7 +79,7 @@ public class ConfigUtil {
 			return null;
 		}
 		String data = CommonUtil.null2String(FileUtil.readFile(file));
-		if ("".equals(data)) {
+		if (StringUtil.isBlank(data)) {
 			logger.info("no content in the file");
 			return null;
 		}
