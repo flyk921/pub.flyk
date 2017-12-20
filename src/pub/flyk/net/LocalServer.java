@@ -20,6 +20,7 @@ public class LocalServer extends Thread {
 	private int serverPort;
 	private String password;
 	
+	private ServerSocket serverSocket = null;
 	private boolean kill = false;
 	
 	public LocalServer(int listenPort, String serverHost, int serverPort,
@@ -33,12 +34,12 @@ public class LocalServer extends Thread {
 	
 	@Override
 	public void run() {
-		ServerSocket serverSocket = null;
 		try {
 			serverSocket = new ServerSocket(listenPort);
 		} catch (Exception e) {
 			logger.warning("listenPort : " + listenPort + ", create ServerSocket failed " + e.getMessage());
 			kill = true;
+			throw new RuntimeException(e.getMessage());
 		}
 		while (!kill) {
 			Socket socket = null;
@@ -62,13 +63,6 @@ public class LocalServer extends Thread {
 				logger.info("SocketControl cteate or run failed !" + e.getMessage());
 			}
 		}
-		if (serverSocket != null) {
-			try {
-				serverSocket.close();
-			} catch (Exception e) {
-				logger.info("ServerSocket close failed !" + e.getMessage());
-			}
-		}
 	}
 	
 	private void pause(long millis) {
@@ -79,5 +73,13 @@ public class LocalServer extends Thread {
 	}
 	public void close(){
 		kill = true;
+		if (serverSocket != null) {
+			try {
+				serverSocket.close();
+				serverSocket = null;
+			} catch (Exception e) {
+				logger.info("ServerSocket close failed !" + e.getMessage());
+			}
+		}
 	}
 }

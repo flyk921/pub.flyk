@@ -39,9 +39,9 @@ public class ClientService {
 		int proxyPort;
 		try {
 			if (args.length == 4) {
-				serverHost = CommonUtil.null2String(args[0]);
+				serverHost = args[0];
 				serverPort = Integer.parseInt(args[1]);
-				password = CommonUtil.null2String(args[2]);
+				password = args[2];
 				proxyPort = Integer.parseInt(args[3]);
 			}else{
 				Map<String, String> clientConfig = ConfigUtil.getClientConfig();
@@ -50,8 +50,7 @@ public class ClientService {
 				password = CommonUtil.null2String(clientConfig.get("password"));
 				proxyPort = Integer.parseInt(CommonUtil.null2String(clientConfig.get("proxyPort")));
 			}
-			ClientService clientService = new ClientService(serverHost,serverPort,password,proxyPort);
-			clientService.service();
+			new LocalServer(proxyPort, serverHost, serverPort, password).start();
 		} catch (Exception e) {
 			logger.warning("ClientService start failed : " + e.getMessage());
 		}
@@ -60,12 +59,13 @@ public class ClientService {
 
 	public void service() {
 		localServer = new LocalServer(proxyPort, serverHost, serverPort, password);
-		localServer.run();
+		localServer.start();
 	}
 	
 	public void close(){
 		if (localServer != null) {
 			localServer.close();
+			localServer = null;
 		}
 	}
 

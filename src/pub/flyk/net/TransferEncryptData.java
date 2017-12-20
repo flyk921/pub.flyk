@@ -4,6 +4,7 @@ import java.io.InputStream;
 import java.io.OutputStream;
 import java.util.logging.Logger;
 
+import pub.flyk.security.EncryptAndDecrypt;
 import pub.flyk.utils.LoggerFactory;
 
 /**
@@ -18,13 +19,13 @@ public class TransferEncryptData extends Thread {
 	private SocketControl socketControl = null;
 	private InputStream inputStream = null;
 	private OutputStream outputStream = null;
-	private String password;
+	private EncryptAndDecrypt encryptAndDecrypt;
 	public TransferEncryptData(SocketControl socketControl,
 			InputStream inputStream, OutputStream outputStream, String password) {
 		super();
 		this.socketControl = socketControl;
 		this.inputStream = inputStream;
 		this.outputStream = outputStream;
-		this.password = password;
+		this.encryptAndDecrypt = EncryptAndDecrypt.getInstance(password);
 	} 
 }
