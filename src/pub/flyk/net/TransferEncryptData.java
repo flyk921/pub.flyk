@@ -28,4 +28,20 @@ public class TransferEncryptData extends Thread {
 		this.outputStream = outputStream;
 		this.encryptAndDecrypt = EncryptAndDecrypt.getInstance(password);
 	} 
+	
+	@Override
+	public void run() {
+		byte[] buffer = new byte[EncryptAndDecrypt.BUFFER_SIZE_MIN];
+		byte[] data = null;
+		byte[] encryptData = null;
+		try {
+			
+		} catch (Exception e) {
+			// TODO: handle exception
+		} finally {
+			socketControl.kill();
+		}
+		
+		
+	}
 }

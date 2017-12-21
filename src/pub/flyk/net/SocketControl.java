@@ -19,6 +19,10 @@ public class SocketControl extends Thread {
 	private Socket proxySocket = null;
 	
 	private String password; 
+	
+	private boolean isInputOver = false;
+	
+	private boolean isOutputOver = false;
 
 	public SocketControl(Socket clientSocket, String proxyHost, int proxyPort, String password) {
 		try {
@@ -29,6 +33,14 @@ public class SocketControl extends Thread {
 			logger.warning("SocketControl create failed : " + e.getMessage());
 			throw new RuntimeException(e.getMessage());
 		}
+	}
+	
+	public synchronized void setInputOver(boolean isInputOver) {
+		this.isInputOver = isInputOver;
+	}
+	
+	public synchronized void setOutputOver(boolean isOutputOver) {
+		this.isOutputOver = isOutputOver;
 	}
 	
 	@Override

@@ -29,5 +29,10 @@ public class TransferDecryptData extends Thread {
 		this.outputStream = outputStream;
 		this.encryptAndDecrypt = EncryptAndDecrypt.getInstance(password);
 	} 
+	
+	@Override
+	public void run() {
+		//TODO 
+	}
 
 }
