@@ -1,9 +1,9 @@
 package pub.flyk.security;
 
+import java.security.InvalidAlgorithmParameterException;
 import java.security.InvalidKeyException;
 import java.security.MessageDigest;
 import java.security.SecureRandom;
-import java.util.Arrays;
 import java.util.Base64;
 import java.util.logging.Logger;
 
@@ -25,22 +25,31 @@ public class EncryptAndDecrypt {
 
 	private Cipher cipher = null;
 	
-	private String key = null;
+	private SecretKey key = null;
 	
-	private static final int ENCRYPT_SIZE = 30;
+	public static final int ENCRYPT_SIZE = 31;
+	
+	public static final int BLOCK_SIZE = 15;
 
-	private static final int IV_SIZE = 16;
+	public static final int IV_SIZE = 16;
 
-	private static final int NOISE_MAX = 1024 * 4;
+	public static final int NOISE_MAX = 1024 * 4;
+	
+	public static final int BUFFER_SIZE_MIN = 1024 * 128; 
+
+	public static final int BUFFER_SIZE_MAX = 1024 * 512; 
+
+	public static final int BUFFER_SIZE_STEP = 1024 * 128; 
 	
 	private EncryptAndDecrypt(String key) {
 		super();
-		this.key = key;
 		try {
 			this.cipher = Cipher.getInstance("AES/CFB/NoPadding");
 			this.secureRandom = new SecureRandom();
+			this.key = getSecretKey(key);
 		} catch (Exception e) {
 			logger.warning("init EncryptAndDecrypt failed : " + e.getMessage());
+			throw new RuntimeException(e.getMessage());
 		}
 	}
 	
@@ -53,16 +62,15 @@ public class EncryptAndDecrypt {
 			MessageDigest messageDigest = MessageDigest.getInstance("MD5");
 			byte[] result = messageDigest.digest(StringUtil.getBytesUtf8(key));
 			byte[] keyBytes = Base64.getEncoder().encode(result);
-			System.out.println(keyBytes.length);
 			return new SecretKeySpec(keyBytes, 0, keyBytes.length, "AES");
 		} catch (Exception e) {
 			logger.warning("getSecretKeyByKey error:" + e.getMessage());
+			throw new RuntimeException(e.getMessage());
 		}
-		return null;
 	}
 	
 	
-	public byte[] invoke(byte[] data,int mode,byte[] IV){
+	private byte[] invoke(byte[] data,int mode,byte[] IV){
 		if (!checkMode(mode)) {
 			logger.info("invalid mode");
 			return null;
@@ -72,15 +80,13 @@ public class EncryptAndDecrypt {
 			return null;
 		}
 		if (!checkData(data)) {
-			logger.info("data ");
+			logger.info("data is null");
 			return null;
 		}
 		try {
 			IvParameterSpec IVSpec = new IvParameterSpec(IV);
-//			cipher.init(mode, getSecretKey(this.key), IVSpec);
-			cipher.init(mode, getSecretKey(this.key));
-//		} catch (InvalidKeyException | InvalidAlgorithmParameterException e) {
-		} catch (InvalidKeyException e) {
+			cipher.init(mode, key, IVSpec);
+		} catch (InvalidKeyException | InvalidAlgorithmParameterException e) {
 			logger.warning("init cipher failed : " + e.getMessage());
 			return null;
 		}
@@ -93,9 +99,6 @@ public class EncryptAndDecrypt {
 		
 		return null;
 	}
-	
-	
-	
 	
 	private boolean checkData(byte[] data) {
 		if (data != null ) {
@@ -123,43 +126,66 @@ public class EncryptAndDecrypt {
 		return false;
 	}
 	
-	
-	private byte[] getSecureRandom(int size) {
-
-		byte[] bytes = new byte[size];
-
-		secureRandom.nextBytes(bytes);
-
-		return bytes;
-
-	}
 
 	public static EncryptAndDecrypt getInstance(String key){
 		return new EncryptAndDecrypt(key);
 	}
 	
+	
+	public byte[] getSecureRandom(int size) {
+		
+		byte[] bytes = new byte[size];
+		
+		secureRandom.nextBytes(bytes);
+		
+		return bytes;
+		
+	}
 	/**
 	 * 
-	 * @param key 
 	 * @param bytes
+	 * @param IV
 	 * @return
 	 */
-	public byte[] encrypt(byte[] bytes){
-		byte[] IV = getSecureRandom(IV_SIZE);
-		System.out.println("iv bytes" + Arrays.toString(IV));
-		byte[] encrypt_data = invoke(bytes, Cipher.ENCRYPT_MODE, IV);
-		return encrypt_data;
+	public byte[] encrypt(byte[] bytes,byte[] IV){
+		return invoke(bytes, Cipher.ENCRYPT_MODE, IV);
 	}
 	
 	/**
 	 * 
-	 * @param key
 	 * @param bytes
+	 * @param IV
 	 * @return
 	 */
-	public byte[] decrypt(byte[] bytes){
-		return bytes;
+	public byte[] decrypt(byte[] bytes,byte[] IV){
+		return invoke(bytes, Cipher.DECRYPT_MODE, IV);
 	}
 
+	public byte[] getBlockSizeBytes(int dataSize, int noiseSize) {
+		try {
+			return StringUtil.getBytesUtf8(String.format("%010d:%04d", dataSize, noiseSize));
+		} catch (Exception e) {
+			logger.warning("getBlockSizeBytes error : " + e.getMessage());
+			return null;
+		}
+
+	}
+	public int[] getBlockSize(byte[] size) {
+		if (size == null || size.length != BLOCK_SIZE) {
+			return null;
+		}
+		try {
+			String sizeStr = StringUtil.newStringUtf8(size);
+
+			if (!sizeStr.matches("\\d+,\\d+")) {
+				return null;
+			}
+			String[] sizeArr = sizeStr.split(":");
+			return new int[] { Integer.valueOf(sizeArr[0]), Integer.valueOf(sizeArr[1]) };
+		} catch (Exception e) {
+			logger.warning("getBlockSize error : " + e.getMessage());
+			return null;
+		}
+	}
 
 }

@@ -1,6 +1,9 @@
 package pub.flyk.utils;
 
+import java.util.Random;
+
 public class CommonUtil {
+	private static Random random = new Random();
 	
 	/**
 	 * 将对象转换成字符串,如果待转换对象为null则返回""
@@ -22,6 +25,10 @@ public class CommonUtil {
 			return s;
 		}
 		return obj.toString();
+	}
+	
+	public static int randomInt(int max){
+		return random.nextInt(max);
 	}
 
 }

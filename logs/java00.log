@@ -1,32 +1,22 @@
-Dec 04, 2017 11:14:47 AM pub.flyk.client.Test main
-SEVERE: haha
-Dec 04, 2017 11:14:47 AM pub.flyk.client.Test main
-INFO: haha
-Dec 04, 2017 11:14:47 AM pub.flyk.client.Test main
-WARNING: haha
-Dec 04, 2017 11:14:47 AM pub.flyk.client.Test main
-INFO: com.xyz.foo.level
-Dec 04, 2017 11:15:13 AM pub.flyk.client.Test main
-SEVERE: haha
-Dec 04, 2017 11:15:13 AM pub.flyk.client.Test main
-INFO: haha
-Dec 04, 2017 11:15:13 AM pub.flyk.client.Test main
-WARNING: haha
-Dec 04, 2017 11:15:13 AM pub.flyk.client.Test main
-INFO: com.xyz.foo.level
-Dec 04, 2017 11:24:05 AM pub.flyk.client.Test main
-SEVERE: haha
-Dec 04, 2017 11:24:05 AM pub.flyk.client.Test main
-INFO: haha
-Dec 04, 2017 11:24:05 AM pub.flyk.client.Test main
-WARNING: haha
-Dec 04, 2017 11:24:05 AM pub.flyk.client.Test main
-INFO: com.xyz.foo.level
-Dec 04, 2017 11:24:46 AM pub.flyk.client.Test main
-SEVERE: haha
-Dec 04, 2017 11:24:46 AM pub.flyk.client.Test main
-INFO: haha
-Dec 04, 2017 11:24:46 AM pub.flyk.client.Test main
-WARNING: haha
-Dec 04, 2017 11:24:46 AM pub.flyk.client.Test main
-INFO: com.xyz.foo.level
+Dec 22, 2017 11:41:10 AM pub.flyk.utils.ConfigUtil getServerConfig
+INFO: init serverConfig !
+Dec 22, 2017 11:41:11 AM pub.flyk.server.ServerService service
+INFO: server is starting !
+Dec 22, 2017 11:41:11 AM pub.flyk.server.ServerService service
+INFO: proxyHost : 127.0.0.1
+Dec 22, 2017 11:41:11 AM pub.flyk.server.ServerService service
+INFO: proxyPort : 3128
+Dec 22, 2017 11:41:11 AM pub.flyk.utils.ConfigUtil getUserList
+INFO: init userList !
+Dec 22, 2017 11:41:11 AM pub.flyk.server.ServerService service
+INFO: add LocalServer port : 10003
+Dec 22, 2017 11:41:11 AM pub.flyk.server.ServerService service
+INFO: add LocalServer port : 10002
+Dec 22, 2017 11:41:11 AM pub.flyk.server.ServerService service
+INFO: add LocalServer port : 10001
+Dec 22, 2017 3:46:58 PM pub.flyk.utils.ConfigUtil getServerConfig
+INFO: init serverConfig !
+Dec 22, 2017 3:46:59 PM pub.flyk.server.ServerService service
+INFO: server already started!
+Dec 22, 2017 3:46:59 PM pub.flyk.server.ServerService service
+INFO: if it do not work ,please delete C:\Users\developer\workspace\pub.flyk\server.lock file and restart

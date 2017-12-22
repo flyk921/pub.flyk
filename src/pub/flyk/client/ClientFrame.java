@@ -122,8 +122,7 @@ public class ClientFrame extends JFrame{
 			trayIcon = new TrayIcon(logo, title, null);
 			trayIcon.setImageAutoSize(true);
 			trayIcon.addActionListener(listener -> {
-				setState(NORMAL);
-				setVisible(true);
+				showFrame();
 			});
 			
 			systemTray = SystemTray.getSystemTray();
