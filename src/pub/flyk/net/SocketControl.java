@@ -52,24 +52,28 @@ public class SocketControl extends Thread {
 			proxySocket.setKeepAlive(true);
 			clientSocket.setKeepAlive(true);
 			
-			new TransferDecryptData(this, proxySocket.getInputStream(), clientSocket.getOutputStream(), password).start();
 			new TransferEncryptData(this, clientSocket.getInputStream(), proxySocket.getOutputStream(), password).start();
+			new TransferDecryptData(this, proxySocket.getInputStream(), clientSocket.getOutputStream(), password).start();
 		} catch (Exception e) {
 			logger.warning("TransferData failed : " + e.getMessage());
+			isInputOver = true;
+			isOutputOver = true;
 			kill();
 		}
 	}
 	
 	public void kill(){
-		try {
-			proxySocket.close();
-			logger.info("proxySocket closed");
-		} catch (Exception e) {
-		}
-		try {
-			clientSocket.close();
-			logger.info("clientSocket closed");
-		} catch (Exception e) {
+		if (isInputOver && isOutputOver) {
+			try {
+				proxySocket.close();
+				logger.info("proxySocket closed");
+			} catch (Exception e) {
+			}
+			try {
+				clientSocket.close();
+				logger.info("clientSocket closed");
+			} catch (Exception e) {
+			}
 		}
 	}
 

@@ -33,7 +33,7 @@ public class EncryptAndDecrypt {
 
 	public static final int IV_SIZE = 16;
 
-	public static final int NOISE_MAX = 1024 * 2;
+	public static final int NOISE_MAX = 1024 * 4;
 	
 	public static final int BUFFER_SIZE_MIN = 1024 * 128; 
 
@@ -80,7 +80,7 @@ public class EncryptAndDecrypt {
 			return null;
 		}
 		if (!checkData(data)) {
-			logger.info("data ");
+			logger.info("data is null");
 			return null;
 		}
 		try {

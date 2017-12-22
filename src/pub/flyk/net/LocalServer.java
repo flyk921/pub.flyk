@@ -60,7 +60,7 @@ public class LocalServer extends Thread {
 			try {
 				new SocketControl(socket, serverHost, serverPort, password).start();
 			} catch (Exception e) {
-				logger.info("SocketControl cteate or run failed !" + e.getMessage());
+				logger.warning("SocketControl cteate or run failed !" + e.getMessage());
 			}
 		}
 	}
