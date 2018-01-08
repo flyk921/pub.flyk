@@ -177,7 +177,7 @@ public class EncryptAndDecrypt {
 		try {
 			String sizeStr = StringUtil.newStringUtf8(size);
 
-			if (!sizeStr.matches("\\d+,\\d+")) {
+			if (!sizeStr.matches("\\d+:\\d+")) {
 				return null;
 			}
 			String[] sizeArr = sizeStr.split(":");

@@ -1,5 +1,6 @@
 package pub.flyk.utils;
 
+import java.io.File;
 import java.io.FileInputStream;
 import java.io.InputStream;
 import java.util.logging.LogManager;
@@ -8,9 +9,11 @@ import java.util.logging.Logger;
 public class LoggerFactory {
 	static{
 		try {
-			String file = LoggerFactory.class.getResource("/").getPath()+"logging.properties";
-			InputStream in = new FileInputStream(file);
-			LogManager.getLogManager().readConfiguration(in);
+			File file = new File("config/logger.properties");
+			if (file.exists()) {
+				InputStream in = new FileInputStream(file);
+				LogManager.getLogManager().readConfiguration(in);
+			}
 		} catch (Exception e) {
 			
 		}

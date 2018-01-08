@@ -101,7 +101,7 @@ public class ServerService {
 						LocalServer localServer = new LocalServer(Integer.parseInt(port), proxyHost, proxyPort, key);
 						localServer.start();
 						localServers.put(port, localServer);
-						logger.info("add LocalServer port : "+ port );
+						logger.info("add LocalServer port : " + port + " , key : " + key);
 					}
 				} catch (Exception e) {
 					logger.warning("add LocalServer failed ! port : "+ port + " : " + e.getMessage());
