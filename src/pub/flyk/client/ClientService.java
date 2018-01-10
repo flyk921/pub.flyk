@@ -51,7 +51,7 @@ public class ClientService {
 				proxyPort = Integer.parseInt(CommonUtil.null2String(clientConfig.get("proxyPort")));
 			}
 			logger.info("serverHost : " + serverHost + ", serverPort : " + serverPort + ", password : " + password + ", proxyPort : " + proxyPort);
-			new LocalServer(proxyPort, serverHost, serverPort, password).start();
+			new LocalServer(proxyPort, serverHost, serverPort, password, false).start();
 		} catch (Exception e) {
 			logger.warning("ClientService start failed : " + e.getMessage());
 		}
@@ -60,7 +60,7 @@ public class ClientService {
 
 	public void service() {
 		logger.info("serverHost : " + serverHost + ", serverPort : " + serverPort + ", password : " + password + ", proxyPort : " + proxyPort);
-		localServer = new LocalServer(proxyPort, serverHost, serverPort, password);
+		localServer = new LocalServer(proxyPort, serverHost, serverPort, password, false);
 		localServer.start();
 	}
 	

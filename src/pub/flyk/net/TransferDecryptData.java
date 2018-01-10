@@ -41,17 +41,17 @@ public class TransferDecryptData extends Thread {
 		try {
 			while(true){
 				int readSize = inputStream.read(buffer);
-				if (readSize == -1 && count-- > 0) {
+				if (readSize == -1 && count-- == 0) {
 					socketControl.setOutputOver(true);
-					logger.info("there is no data, TransferDecryptData will stop !");
+					logger.info(this.getName() + "  there is no data, TransferDecryptData will stop !");
 					break;
 				}else if(readSize == -1 ){
-					logger.info("there is no data ,wait for 1s ");
+					logger.info(this.getName() + "  there is no data ,wait for 1s ");
 					pause(1000l);
 					continue;
 				}else if(readSize != EncryptAndDecrypt.ENCRYPT_SIZE){
 					socketControl.setOutputOver(true);
-					logger.info("read wrong data, TransferDecryptData will stop !");
+					logger.info(this.getName() + "  read wrong data, TransferDecryptData will stop !");
 					break;
 				}
 				byte[] blockIV = new byte[EncryptAndDecrypt.IV_SIZE];
@@ -61,13 +61,13 @@ public class TransferDecryptData extends Thread {
 				byte[] deBlockData = encryptAndDecrypt.decrypt(enBlockData, blockIV);
 				if (deBlockData == null) {
 					socketControl.setOutputOver(true);
-					logger.info("BlockData decrypt error !");
+					logger.info(this.getName() + "  BlockData decrypt error !");
 					break;
 				}
 				int[] blockSize = encryptAndDecrypt.getBlockSize(deBlockData);
 				if (blockSize == null || blockSize.length != 2) {
 					socketControl.setOutputOver(true);
-					logger.info("get blockSize failed !");
+					logger.info(this.getName() + "  get blockSize failed !");
 					break;
 				}
 				//read data 
@@ -75,7 +75,7 @@ public class TransferDecryptData extends Thread {
 				data = new byte[dataSize];
 				readSize = inputStream.read(data);
 				if (readSize == -1 || dataSize != readSize) {
-					logger.info("read wrong data , readSize : " + readSize + " , dataSize : " + dataSize);
+					logger.info(this.getName() + "  read wrong data , readSize : " + readSize + " , dataSize : " + dataSize);
 					socketControl.setOutputOver(true);
 					break;
 				}
@@ -87,7 +87,7 @@ public class TransferDecryptData extends Thread {
 				decryptData = encryptAndDecrypt.decrypt(enData, dataIV);
 				
 				if (decryptData == null) {
-					logger.info("data decrypt error !");
+					logger.info(this.getName() + "  data decrypt error !");
 					socketControl.setOutputOver(true);
 					break;
 				}
@@ -97,7 +97,7 @@ public class TransferDecryptData extends Thread {
 			}
 			
 		} catch (Exception e) {
-			logger.warning("TransferDecryptData error : " + e.getMessage());
+			logger.warning(this.getName() + "  TransferDecryptData error : " + e.getMessage());
 		} finally {
 			if (inputStream != null) {
 				try {

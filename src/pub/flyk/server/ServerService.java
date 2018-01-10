@@ -98,7 +98,7 @@ public class ServerService {
 					if (StringUtil.isBlank(key)) {
 						logger.info("add LocalServer failed ! port : "+ port + ", key is blank!!");
 					}else{
-						LocalServer localServer = new LocalServer(Integer.parseInt(port), proxyHost, proxyPort, key);
+						LocalServer localServer = new LocalServer(Integer.parseInt(port), proxyHost, proxyPort, key, true);
 						localServer.start();
 						localServers.put(port, localServer);
 						logger.info("add LocalServer port : " + port + " , key : " + key);

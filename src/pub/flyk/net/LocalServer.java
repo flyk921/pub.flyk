@@ -22,14 +22,16 @@ public class LocalServer extends Thread {
 	
 	private ServerSocket serverSocket = null;
 	private boolean kill = false;
+	private boolean isServer = false;
 	
 	public LocalServer(int listenPort, String serverHost, int serverPort,
-			String password) {
+			String password,boolean isServer) {
 		super();
 		this.listenPort = listenPort;
 		this.serverHost = serverHost;
 		this.serverPort = serverPort;
 		this.password = password;
+		this.isServer = isServer;
 	}
 	
 	@Override
@@ -58,7 +60,12 @@ public class LocalServer extends Thread {
 				}
 			}
 			try {
-				new SocketControl(socket, serverHost, serverPort, password).start();
+				Socket serverSocket = new Socket(serverHost, serverPort);
+				if (isServer) {
+					new SocketControl(serverSocket,socket, password).start();
+				}else{
+					new SocketControl(socket,serverSocket, password).start();
+				}
 			} catch (Exception e) {
 				logger.warning("SocketControl cteate or run failed !" + e.getMessage());
 			}

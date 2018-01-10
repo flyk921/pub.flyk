@@ -14,9 +14,9 @@ public class SocketControl extends Thread {
 	
 	private static Logger logger = LoggerFactory.getLogger(SocketControl.class);
 	
-	private Socket clientSocket = null;
+	private Socket normalSocket = null;
 
-	private Socket proxySocket = null;
+	private Socket encryptSocket = null;
 	
 	private String password; 
 	
@@ -24,15 +24,10 @@ public class SocketControl extends Thread {
 	
 	private boolean isOutputOver = false;
 
-	public SocketControl(Socket clientSocket, String proxyHost, int proxyPort, String password) {
-		try {
-			this.clientSocket = clientSocket;
-			this.password = password;
-			this.proxySocket = new Socket(proxyHost, proxyPort);
-		} catch (Exception e) {
-			logger.warning("SocketControl create failed : " + e.getMessage());
-			throw new RuntimeException(e.getMessage());
-		}
+	public SocketControl(Socket normalSocket, Socket encryptSocket, String password) {
+		this.normalSocket = normalSocket;
+		this.password = password;
+		this.encryptSocket = encryptSocket;
 	}
 	
 	public synchronized void setInputOver(boolean isInputOver) {
@@ -46,14 +41,14 @@ public class SocketControl extends Thread {
 	@Override
 	public void run() {
 		try {
-			proxySocket.setSoTimeout(180000);
-			clientSocket.setSoTimeout(180000);
+			encryptSocket.setSoTimeout(180000);
+			normalSocket.setSoTimeout(180000);
 			
-			proxySocket.setKeepAlive(true);
-			clientSocket.setKeepAlive(true);
+			encryptSocket.setKeepAlive(true);
+			normalSocket.setKeepAlive(true);
 			
-			new TransferEncryptData(this, clientSocket.getInputStream(), proxySocket.getOutputStream(), password).start();
-			new TransferDecryptData(this, proxySocket.getInputStream(), clientSocket.getOutputStream(), password).start();
+			new TransferEncryptData(this, normalSocket.getInputStream(), encryptSocket.getOutputStream(), password).start();
+			new TransferDecryptData(this, encryptSocket.getInputStream(), normalSocket.getOutputStream(), password).start();
 		} catch (Exception e) {
 			logger.warning("TransferData failed : " + e.getMessage());
 			isInputOver = true;
@@ -65,12 +60,12 @@ public class SocketControl extends Thread {
 	public void kill(){
 		if (isInputOver && isOutputOver) {
 			try {
-				proxySocket.close();
+				encryptSocket.close();
 				logger.info("proxySocket closed");
 			} catch (Exception e) {
 			}
 			try {
-				clientSocket.close();
+				normalSocket.close();
 				logger.info("clientSocket closed");
 			} catch (Exception e) {
 			}
