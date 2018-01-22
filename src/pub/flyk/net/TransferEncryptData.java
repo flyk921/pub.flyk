@@ -36,18 +36,13 @@ public class TransferEncryptData extends Thread {
 		byte[] buffer = new byte[EncryptAndDecrypt.BUFFER_SIZE_MIN];
 		byte[] data = null;
 		byte[] encryptData = null;
-		int count = 3;
 		try {
 			while(true){
 				int readSize = inputStream.read(buffer);
-				if (readSize == -1 && count-- == 0) {
+				if (readSize == -1) {
 					socketControl.setInputOver(true);
 					logger.info(this.getName() + "  there is no data, TransferEncryptData will stop !");
 					break;
-				}else if(readSize == -1){
-					logger.info(this.getName() + "  there is no data ,wait for 1s ");
-					pause(1000l);
-					continue;
 				}
 				data = new byte[readSize];
 				System.arraycopy(buffer, 0, data, 0, readSize);
@@ -106,14 +101,6 @@ public class TransferEncryptData extends Thread {
 			encryptData = null;
 			socketControl.setInputOver(true);
 			socketControl.kill();
-		}
-	}
-	
-	
-	private void pause(long millis) {
-		try {
-			Thread.sleep(millis);
-		} catch (Exception e) {
 		}
 	}
 }

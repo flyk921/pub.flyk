@@ -37,18 +37,13 @@ public class TransferDecryptData extends Thread {
 		byte[] buffer = new byte[EncryptAndDecrypt.ENCRYPT_SIZE];
 		byte[] data = null;
 		byte[] decryptData = null;
-		int count = 3;
 		try {
 			while(true){
 				int readSize = inputStream.read(buffer);
-				if (readSize == -1 && count-- == 0) {
+				if (readSize == -1) {
 					socketControl.setOutputOver(true);
 					logger.info(this.getName() + "  there is no data, TransferDecryptData will stop !");
 					break;
-				}else if(readSize == -1 ){
-					logger.info(this.getName() + "  there is no data ,wait for 1s ");
-					pause(1000l);
-					continue;
 				}else if(readSize != EncryptAndDecrypt.ENCRYPT_SIZE){
 					socketControl.setOutputOver(true);
 					logger.info(this.getName() + "  read wrong data, TransferDecryptData will stop !");
@@ -118,13 +113,4 @@ public class TransferDecryptData extends Thread {
 			socketControl.kill();
 		}
 	}
-	
-	
-	private void pause(long millis) {
-		try {
-			Thread.sleep(millis);
-		} catch (Exception e) {
-		}
-	}
-
 }
