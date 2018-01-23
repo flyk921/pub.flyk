@@ -57,15 +57,21 @@ public class SocketControl extends Thread {
 		}
 	}
 	
-	public void kill(){
+	public synchronized void kill(){
 		if (isInputOver && isOutputOver) {
 			try {
+				encryptSocket.shutdownInput();
+				encryptSocket.shutdownOutput();
 				encryptSocket.close();
+				encryptSocket = null;
 				logger.info("proxySocket closed");
 			} catch (Exception e) {
 			}
 			try {
+				normalSocket.shutdownInput();
+				normalSocket.shutdownOutput();
 				normalSocket.close();
+				normalSocket = null;
 				logger.info("clientSocket closed");
 			} catch (Exception e) {
 			}

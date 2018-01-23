@@ -41,11 +41,9 @@ public class TransferDecryptData extends Thread {
 			while(true){
 				int readSize = inputStream.read(buffer);
 				if (readSize == -1) {
-					socketControl.setOutputOver(true);
 					logger.info(this.getName() + "  there is no data, TransferDecryptData will stop !");
 					break;
 				}else if(readSize != EncryptAndDecrypt.ENCRYPT_SIZE){
-					socketControl.setOutputOver(true);
 					logger.info(this.getName() + "  read wrong data, TransferDecryptData will stop !");
 					break;
 				}
@@ -55,13 +53,11 @@ public class TransferDecryptData extends Thread {
 				System.arraycopy(buffer, blockIV.length, enBlockData, 0, enBlockData.length);
 				byte[] deBlockData = encryptAndDecrypt.decrypt(enBlockData, blockIV);
 				if (deBlockData == null) {
-					socketControl.setOutputOver(true);
 					logger.info(this.getName() + "  BlockData decrypt error !");
 					break;
 				}
 				int[] blockSize = encryptAndDecrypt.getBlockSize(deBlockData);
 				if (blockSize == null || blockSize.length != 2) {
-					socketControl.setOutputOver(true);
 					logger.info(this.getName() + "  get blockSize failed !");
 					break;
 				}
@@ -80,7 +76,6 @@ public class TransferDecryptData extends Thread {
 				
 				if (dataSize != readCount) {
 					logger.info(this.getName() + "  read wrong data , readSize : " + readSize + " , dataSize : " + dataSize);
-					socketControl.setOutputOver(true);
 					break;
 				}
 				byte[] dataIV = new byte[EncryptAndDecrypt.IV_SIZE];
@@ -92,7 +87,6 @@ public class TransferDecryptData extends Thread {
 				
 				if (decryptData == null) {
 					logger.info(this.getName() + "  data decrypt error !");
-					socketControl.setOutputOver(true);
 					break;
 				}
 				
@@ -106,12 +100,14 @@ public class TransferDecryptData extends Thread {
 			if (inputStream != null) {
 				try {
 					inputStream.close();
+					inputStream = null;
 				} catch (IOException e) {
 				}
 			}
 			if (outputStream != null) {
 				try {
 					outputStream.close();
+					outputStream = null;
 				} catch (IOException e) {
 				}
 			}

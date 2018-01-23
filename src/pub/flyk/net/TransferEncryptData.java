@@ -40,7 +40,6 @@ public class TransferEncryptData extends Thread {
 			while(true){
 				int readSize = inputStream.read(buffer);
 				if (readSize == -1) {
-					socketControl.setInputOver(true);
 					logger.info(this.getName() + "  there is no data, TransferEncryptData will stop !");
 					break;
 				}
@@ -50,7 +49,6 @@ public class TransferEncryptData extends Thread {
 				byte[] enData = encryptAndDecrypt.encrypt(data, dataIV);
 				
 				if (enData == null) {
-					socketControl.setInputOver(true);
 					logger.info(this.getName() + "  data encrypt error !");
 					break;
 				}
@@ -59,7 +57,6 @@ public class TransferEncryptData extends Thread {
 				byte[] blockIV = encryptAndDecrypt.getSecureRandom(EncryptAndDecrypt.IV_SIZE);
 				byte[] enBlockData = encryptAndDecrypt.encrypt(encryptAndDecrypt.getBlockSizeBytes(enData.length + dataIV.length, noiseData.length), blockIV);
 				if (enBlockData == null || enBlockData.length != EncryptAndDecrypt.BLOCK_SIZE) {
-					socketControl.setInputOver(true);
 					logger.info(this.getName() + "  BlockData encrypt error !");
 					break;
 				}
@@ -87,12 +84,14 @@ public class TransferEncryptData extends Thread {
 			if (inputStream != null) {
 				try {
 					inputStream.close();
+					inputStream = null;
 				} catch (IOException e) {
 				}
 			}
 			if (outputStream != null) {
 				try {
 					outputStream.close();
+					outputStream = null;
 				} catch (IOException e) {
 				}
 			}

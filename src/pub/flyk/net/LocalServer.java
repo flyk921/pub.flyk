@@ -78,7 +78,7 @@ public class LocalServer extends Thread {
 		} catch (Exception e) {
 		}
 	}
-	public void close(){
+	public synchronized void close(){
 		kill = true;
 		if (serverSocket != null) {
 			try {
