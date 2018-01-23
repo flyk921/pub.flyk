@@ -68,8 +68,17 @@ public class TransferDecryptData extends Thread {
 				//read data 
 				int dataSize = blockSize[0] + blockSize[1];
 				data = new byte[dataSize];
-				readSize = inputStream.read(data);
-				if (readSize == -1 || dataSize != readSize) {
+				//readSize = inputStream.read(data);
+				int readCount = 0;
+				while (readCount < dataSize) {
+					readSize = inputStream.read(data, readCount, dataSize - readCount);
+					if (readSize == -1) {
+						break;
+					}
+					readCount += readSize;
+				}
+				
+				if (dataSize != readCount) {
 					logger.info(this.getName() + "  read wrong data , readSize : " + readSize + " , dataSize : " + dataSize);
 					socketControl.setOutputOver(true);
 					break;
