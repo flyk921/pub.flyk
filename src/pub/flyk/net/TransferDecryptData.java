@@ -97,20 +97,6 @@ public class TransferDecryptData extends Thread {
 		} catch (Exception e) {
 			logger.warning(this.getName() + "  TransferDecryptData error : " + e.getMessage());
 		} finally {
-			if (inputStream != null) {
-				try {
-					inputStream.close();
-					inputStream = null;
-				} catch (IOException e) {
-				}
-			}
-			if (outputStream != null) {
-				try {
-					outputStream.close();
-					outputStream = null;
-				} catch (IOException e) {
-				}
-			}
 			buffer = null;
 			data = null;
 			decryptData = null;
