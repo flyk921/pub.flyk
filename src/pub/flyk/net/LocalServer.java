@@ -37,7 +37,7 @@ public class LocalServer extends Thread {
 	@Override
 	public void run() {
 		try {
-			serverSocket = new ServerSocket(listenPort);
+			serverSocket = new ServerSocket(listenPort,100);//backlog set 100
 		} catch (Exception e) {
 			logger.warning("listenPort : " + listenPort + ", create ServerSocket failed " + e.getMessage());
 			kill = true;
@@ -70,6 +70,7 @@ public class LocalServer extends Thread {
 				logger.warning("SocketControl cteate or run failed !" + e.getMessage());
 			}
 		}
+		close();
 	}
 	
 	private void pause(long millis) {

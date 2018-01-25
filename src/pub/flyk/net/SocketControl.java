@@ -32,20 +32,37 @@ public class SocketControl extends Thread {
 	
 	public synchronized void setInputOver(boolean isInputOver) {
 		this.isInputOver = isInputOver;
+		logger.info("encrypt finished !");
+		try {
+			normalSocket.shutdownInput();
+			encryptSocket.shutdownOutput();	
+		} catch (Exception e) {
+			logger.warning("normalSocket.shutdownInput() or encryptSocket.shutdownOutput() " + e.getMessage());
+		}
 	}
 	
 	public synchronized void setOutputOver(boolean isOutputOver) {
 		this.isOutputOver = isOutputOver;
+		logger.info("decrypt finished !");
+		try {
+			encryptSocket.shutdownInput();
+			normalSocket.shutdownOutput();	
+		} catch (Exception e) {
+			logger.warning("encryptSocket.shutdownInput() or normalSocket.shutdownOutput() " + e.getMessage());
+		}
 	}
 	
 	@Override
 	public void run() {
 		try {
-			encryptSocket.setSoTimeout(180000);
-			normalSocket.setSoTimeout(180000);
+			encryptSocket.setSoTimeout(180000);//3 minutes 
+			normalSocket.setSoTimeout(180000);//3 minutes 
 			
 			encryptSocket.setKeepAlive(true);
 			normalSocket.setKeepAlive(true);
+			
+			encryptSocket.setSoLinger(true, 30);//invoke close method , socket will close after 30 seconds 
+			normalSocket.setSoLinger(true, 30);//invoke close method , socket will close after 30 seconds 
 			
 			new TransferEncryptData(this, normalSocket.getInputStream(), encryptSocket.getOutputStream(), password).start();
 			new TransferDecryptData(this, encryptSocket.getInputStream(), normalSocket.getOutputStream(), password).start();
@@ -60,16 +77,12 @@ public class SocketControl extends Thread {
 	public synchronized void kill(){
 		if (isInputOver && isOutputOver) {
 			try {
-				encryptSocket.shutdownInput();
-				encryptSocket.shutdownOutput();
 				encryptSocket.close();
 				encryptSocket = null;
 				logger.info("proxySocket closed");
 			} catch (Exception e) {
 			}
 			try {
-				normalSocket.shutdownInput();
-				normalSocket.shutdownOutput();
 				normalSocket.close();
 				normalSocket = null;
 				logger.info("clientSocket closed");
